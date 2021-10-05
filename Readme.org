@@ -1,5 +1,5 @@
 * fzf-tool-launcher
-Browse & preview file contents, and launch tools/pipelines to process the chosen files.
+Browse & preview contents of files, and launch tools/pipelines to process a selected file.
 ** Installation & requirements
 This file needs to be sourced into your zsh shell (e.g. in your init file),
 and tmux needs to be running before you can use it.
