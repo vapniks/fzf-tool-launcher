@@ -24,7 +24,7 @@ function fzf-tool-launcher() {
     preview="if ${condstr};then head -c${maxsize} {};echo \"\n\nTRUNCATED TO FIRST ${maxsize} BYTES\";else {${preview%%elif}else cat {};fi||cat {}};fi"
     local header="ctrl-g=quit:ctrl-v=view raw:alt-v=view formatted:enter=choose tool:ctrl-j=print filename"
     local toolsmenu 
-    zstyle -s ':fzf-tool-launcher:' toolsmenu toolsmenu || toolsmenu="~/.fzfrepl/tools_menu"
+    zstyle -s ':fzf-tool-launcher:' tools_menu_file toolsmenu || toolsmenu="~/.fzfrepl/tools_menu"
     tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed s@\{\}@{}@' --bind='enter:execute(tmux new-window -n \$(basename {}) -d \"\$(echo \{2..}|sed s@\{\}@{}@)\")'"
     
     local file=$(print -l ${@}|fzf --height=100% \

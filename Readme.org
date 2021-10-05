@@ -31,9 +31,9 @@ zstyle ':fzf-tool-launcher:previewcmd:' csv 'mlr --icsv --opprint cat {}'
 {} is a placeholder for the filename.
 
 By default the tools menu is defined in ~/.fzfrepl/tools_menu, but you
-can change this location by setting the toolsmenu style, like this:
+can change this location by setting the tools_menu_file style, like this:
 
-zstyle ':fzf-tool-launcher:' toolsmenu "~/.fzfrepl/tools_menu"
+zstyle ':fzf-tool-launcher:' tools_menu_file "~/.fzfrepl/tools_menu"
 
 Each line of that file can either be a comment line starting with #,
 or a tool definition; a word naming the tool, followed by the command,
