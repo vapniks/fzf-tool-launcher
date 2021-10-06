@@ -42,6 +42,7 @@ e.g:
 mlr_repl fzfrepl.sh -o -c "mlr {q}" -q "cat" {}
 
 (again {} is a placeholder for the filename).
+See the tools_menu file included in this directory.
 
 As mentioned earlier, large files are truncated before displaying in
 the preview window unformatted. The default threshold for what counts
