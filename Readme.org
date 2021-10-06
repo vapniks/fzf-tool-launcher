@@ -13,7 +13,7 @@ file contents using a predefined command to format the output.
 A different command is used for each different file-ending, and large
 files are truncated before displaying unformatted (so it's fast).
 At the top of the preview window the file size, ownership & permissions
-are displayed, and the word "FORMATTED", or "RAW" for large truncated files.
+are displayed.
 
 When you select a file by pressing enter, you will be presented with a
 menu of tool names. At the bottom of this menu the command line corresponding
