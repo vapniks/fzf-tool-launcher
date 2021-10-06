@@ -11,17 +11,22 @@ function fzf-tool-launcher() {
 	print "No available tmux sessions"
 	return 1
     fi
-    typeset preview='f={} && if' tools='f={} && if' k v
+    typeset preview tools maxsize k v
     typeset -a filetypes
     zstyle -g filetypes ':fzf-tool-launcher:previewcmd:'
-    local maxsize t tmp
     zstyle -s ':fzf-tool-launcher:' max_preview_size maxsize || maxsize=10000000
-    foreach t (${filetypes}) {
-	zstyle -s ':fzf-tool-launcher:previewcmd:' "${t}" tmp
-	preview+=" [ -z \"\${f%%*${t}}\" ];then ${tmp};elif"
-    }
     local condstr="[ \$(stat -c '%s' {}) -gt ${maxsize} ]"
-    preview="if ${condstr};then head -c${maxsize} {};echo \"\n\nTRUNCATED TO FIRST ${maxsize} BYTES\";else {${preview%%elif}else cat {};fi||cat {}};fi"
+    if [[ ${#filetypes} -gt 0 ]]; then
+	preview='f={} && if'
+	local t tmp
+        foreach t (${filetypes}) {
+	    zstyle -s ':fzf-tool-launcher:previewcmd:' "${t}" tmp
+	    preview+=" [ -z \"\${f%%*${t}}\" ];then ${tmp};elif"
+	}
+	preview="if ${condstr};then head -c${maxsize} {};echo \"\n\nTRUNCATED TO FIRST ${maxsize} BYTES\";else {${preview%%elif}else cat {};fi||cat {}};fi"
+    else
+	preview="cat {}"
+    fi
     local header="ctrl-g=quit:ctrl-v=view raw:alt-v=view formatted:enter=choose tool:ctrl-j=print filename"
     local toolsmenu 
     zstyle -s ':fzf-tool-launcher:' tools_menu_file toolsmenu || toolsmenu="~/.fzfrepl/tools_menu"
@@ -35,7 +40,7 @@ function fzf-tool-launcher() {
     tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed s@\{\}@{}@' --bind='enter:execute(tmux new-window -n \$(basename {}) -d \"\$(echo \{2..}|sed s@\{\}@{}@)\")'"
     local file=$(print -l ${@}|fzf --height=100% \
 				   --header="${header}" \
-				   --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && {if ${condstr};then echo \"RAW:\";else echo \"FORMATTED:\";fi} && ${preview}" \
+				   --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
 				   --bind="ctrl-v:execute(less {} >&2)" \
 				   --bind="alt-v:execute({${preview}}|less >&2)" \
 				   --bind="ctrl-j:accept" \
