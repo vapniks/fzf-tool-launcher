@@ -4,6 +4,7 @@
 # to be running before you can use it.
 # See the Readme.org file for details of use & configuration.
 # LICENSE: GNU GPL V3 (http://www.gnu.org/licenses)
+# Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 
 function fzf-tool-launcher() {
     [[ ${SHELL} =~ zsh ]] || { echo "This function only works with zsh"; return 1 }
