@@ -11,7 +11,7 @@ fold:wrap_lines ${SCRIPTS}/fzfrepl.zsh -o -c "fold {q}" {}
 head:show_initial_lines ${SCRIPTS}/fzfrepl.zsh -o -c "head {q}" {}
 iconv:convert_from_one_encoding_to_another ${SCRIPTS}/fzfrepl.zsh -o -c "iconv {q}" {}
 jq:process_json_files ${SCRIPTS}/fzfrepl.zsh -o -c "jq {q}" -q " -C ." {}
-mlr:process_csv_files ${SCRIPTS}/fzfrepl.zsh -n 40 -o -c "mlr {q}" -q "cat" {}
+mlr:process_csv_files ${SCRIPTS}/fzfrepl.zsh -n ${LINES} -o -c "mlr {q}" -q "cat" {}
 nl:prepend_numbers_to_lines ${SCRIPTS}/fzfrepl.zsh -o -c "nl {q}" {}
 openssl:examine_ssl_certs ${SCRIPTS}/fzfrepl.zsh -H1 "openssl x509 -help|&less" -o -c "openssl x509 -noout {q}" -q " -text" {}
 sed-n:stream_editor_(with_--quiet_option) ${SCRIPTS}/fzfrepl.zsh -o -c "sed -n {q}" {}
