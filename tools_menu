@@ -8,6 +8,7 @@ colrm:delete_char_columns ${SCRIPTS}/fzfrepl.zsh -o -c "colrm {q}" {}
 column:format_into_columns ${SCRIPTS}/fzfrepl.zsh -o -c "column {q}" {}
 cut:extract_columns ${SCRIPTS}/fzfrepl.zsh -o -c "cut {q}" {}
 fold:wrap_lines ${SCRIPTS}/fzfrepl.zsh -o -c "fold {q}" {}
+grep:filter_lines ${SCRIPTS}/fzfrepl.zsh -o -c "grep {q}" {}
 head:show_initial_lines ${SCRIPTS}/fzfrepl.zsh -o -c "head {q}" {}
 iconv:convert_from_one_encoding_to_another ${SCRIPTS}/fzfrepl.zsh -o -c "iconv {q}" {}
 jq:process_json_files ${SCRIPTS}/fzfrepl.zsh -o -c "jq {q}" -q " -C ." {}

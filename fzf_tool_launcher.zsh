@@ -38,6 +38,7 @@ function fzf-tool-launcher() {
     # followed by the text right after the +. fzf treats the + as an action separator (used for chaining commnds, see the docs).
     #tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed -e s@\{\}@{}@g -e s@\{\+\}@\"{+}\"@g' --bind='enter:execute(tmux new-window -n test -d \"\$(echo \{2..}|sed -e s@\{\}@{}@g)\")'"
 
+    # TODO: what if there is more than one tmux session running?
     tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed s@\{\}@{}@' --bind='enter:execute(tmux new-window -n \$(basename {}) -d \"\$(echo \{2..}|sed s@\{\}@{}@)\")'"
     local file=$(print -l ${@}|fzf --height=100% \
 				   --header="${header}" \
