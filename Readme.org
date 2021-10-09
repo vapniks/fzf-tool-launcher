@@ -60,6 +60,10 @@ zstyle ':fzf-tool-launcher:' max_preview_size 5242880
 | Ctrl+j | exit and print the selected file                                                 |
 *** Tools menu
 | Enter | run the selected tool on the selected file |
+** Tips
+ - When you launch a tool it will open in new tmux window which will disappear when the tool is exited.
+   If the tool is wrapped by fzfrepl you can save the output by pressing Alt-v to view it in the pager
+   (e.g. less), and using the pagers facility to save its input to a file.
 ** Copyright notice
 Copyright (C) 2021 Joe Bloggs vapniks@yahoo.com
 
