@@ -23,6 +23,7 @@ function fzf-tool-launcher() {
         foreach t (${filetypes}) {
 	    zstyle -s ':fzf-tool-launcher:previewcmd:' "${t}" tmp
 	    preview+=" [ -z \"\${f%%*${t}}\" ];then ${tmp};elif"
+	    preview+=" [ -z \"\${f%%*${t:u}}\" ];then ${tmp};elif"
 	}
 	preview="if ${condstr};then head -c${maxsize} {};echo \"\n\nTRUNCATED TO FIRST ${maxsize} BYTES\";else {${preview%%elif}else cat {};fi||cat {}};fi"
     else
@@ -39,6 +40,9 @@ function fzf-tool-launcher() {
     #tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed -e s@\{\}@{}@g -e s@\{\+\}@\"{+}\"@g' --bind='enter:execute(tmux new-window -n test -d \"\$(echo \{2..}|sed -e s@\{\}@{}@g)\")'"
 
     # TODO: what if there is more than one tmux session running?
+    # TODO: option to start tool in new tmux pane within current window
+    # TODO: either in this function, or in fzfrepl, add keybinding to pipe output to new/existing tool window
+    #       imagine having different frames in the same window all working on the same initial file...
     tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed s@\{\}@{}@' --bind='enter:execute(tmux new-window -n \$(basename {}) -d \"\$(echo \{2..}|sed s@\{\}@{}@)\")'"
     local file=$(print -l ${@}|fzf --height=100% \
 				   --header="${header}" \
