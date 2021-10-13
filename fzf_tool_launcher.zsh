@@ -24,6 +24,7 @@ function fzf-tool-launcher() {
 	    zstyle -s ':fzf-tool-launcher:previewcmd:' "${t}" tmp
 	    preview+=" [ -z \"\${f%%*${t}}\" ];then ${tmp};elif"
 	    preview+=" [ -z \"\${f%%*${t:u}}\" ];then ${tmp};elif"
+	    preview+=" [ -z \"\${f%%*${(C)t}}\" ];then ${tmp};elif"
 	}
 	preview="if ${condstr};then head -c${maxsize} {};echo \"\n\nTRUNCATED TO FIRST ${maxsize} BYTES\";else {${preview%%elif}else cat {};fi||cat {}};fi"
     else

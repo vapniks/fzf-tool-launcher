@@ -31,6 +31,9 @@ particular file-ending, use the file-ending as the style name, and
 zstyle ':fzf-tool-launcher:previewcmd:' csv 'mlr --icsv --opprint cat {}'
 
 {} is a placeholder for the filename.
+Note: uppercase & capitalized versions of file-endings are also matched
+by default so there is no need to add another entry for CSV or Csv in the
+above example.
 
 By default the tools menu is defined in ~/.fzfrepl/tools_menu, but you
 can change this location by setting the tools_menu_file style, like this:
