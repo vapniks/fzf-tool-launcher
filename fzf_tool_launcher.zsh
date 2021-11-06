@@ -7,6 +7,7 @@
 # Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 
 function fzf-tool-launcher() {
+    # TODO: usage/help option?
     [[ ${SHELL} =~ zsh ]] || { echo "This function only works with zsh"; return 1 }
     typeset preview tools maxsize k v
     typeset -a filetypes
@@ -26,7 +27,6 @@ function fzf-tool-launcher() {
     else
 	preview="cat {}"
     fi
-    local header="ctrl-g=quit:ctrl-v=view raw:alt-v=view formatted:enter=choose tool:ctrl-j=print filename"
     local toolsmenu 
     zstyle -s ':fzf-tool-launcher:' tools_menu_file toolsmenu || toolsmenu="~/.fzfrepl/tools_menu"
     # TODO: try to get {+} replacements working. Have tried all different kinds of quoting combinations, but none seem to work.
@@ -42,6 +42,7 @@ function fzf-tool-launcher() {
     # TODO: either in this function, or in fzfrepl, add keybinding to pipe output to new/existing tool window
     #       imagine having different frames in the same window all working on the same initial file...
 
+    # Set type of window to open when tool is selected
     typeset -A windowcmds
     typeset cmdstr="\$(echo \{2..}|sed s@\{\}@{}@)"
     windowcmds[tmux_win]="tmux new-window -n \$(basename {}) -d \"${cmdstr}\""
@@ -53,7 +54,6 @@ function fzf-tool-launcher() {
     windowcmds[xterm]="xterm -T \$(basename {}) -e \"${cmdstr}\" &"
     windowcmds[eval]="eval ${cmdstr}"
     windowcmds[exec]="exec ${cmdstr}"
-
     typeset dfltwin win1 win2
     dfltwin=${FZFTOOL_WINDOW:-eval}
     if [[ -n ${TMUX} ]]; then
@@ -69,10 +69,22 @@ function fzf-tool-launcher() {
 	win1=${FZFTOOL_WIN1:-eval}
 	win2=${FZFTOOL_WIN2:-eval}
     fi
+    # Fit header to fit screen
+    local header1="ctrl-g=quit:enter=run tool in ${dfltwin//eval/this window}:alt-1=run tool in ${win1}:alt-2=run tool in ${win2}:ctrl-j=print filename:ctrl-v=view raw:alt-v=view formatted"
+    local header2 i1=0 ncols=$((COLUMNS-5))
+    local i2=${ncols}
+    until ((i2>${#header1})); do
+	i2=${${header1[${i1:-0},${i2}]}[(I):]}
+	header2+="${header1[${i1},((i1+i2-1))]}
+"
+	i1=$((i1+i2+1))
+	i2=$((i1+ncols))
+    done
+    header2+=${header1[$i1,$i2]}
     
     tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed s@\{\}@{}@'  --bind='enter:execute(XXX)'"
     local file=$(print -l ${@}|fzf --height=100% \
-				   --header="${header}" \
+				   --header="${header2}" \
 				   --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
 				   --bind="ctrl-v:execute(less {} >&2)" \
 				   --bind="alt-v:execute({${preview}}|less >&2)" \
