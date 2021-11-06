@@ -2,27 +2,27 @@
 # -*- (sh-set-shell "zsh") -*-
 # Commands for use with fzf-tool-launcher & fzfrepl
 # Set or replace ${SCRIPTS} to the directory containing fzfrepl.zsh
-awk:file_processing_language ${SCRIPTS}/fzfrepl.zsh -o -c "awk {q}" {}
-cat:print_file ${SCRIPTS}/fzfrepl.zsh -o -c "cat {q}" {}
-colrm:delete_char_columns ${SCRIPTS}/fzfrepl.zsh -o -c "colrm {q}" {}
-column:format_into_columns ${SCRIPTS}/fzfrepl.zsh -o -c "column {q}" {}
-cut:extract_columns ${SCRIPTS}/fzfrepl.zsh -o -c "cut {q}" {}
-fold:wrap_lines ${SCRIPTS}/fzfrepl.zsh -o -c "fold {q}" {}
-grep:filter_lines ${SCRIPTS}/fzfrepl.zsh -o -c "grep {q}" {}
-head:show_initial_lines ${SCRIPTS}/fzfrepl.zsh -o -c "head {q}" {}
-iconv:convert_from_one_encoding_to_another ${SCRIPTS}/fzfrepl.zsh -o -c "iconv {q}" {}
-jq:process_json_files ${SCRIPTS}/fzfrepl.zsh -o -c "jq {q}" -q " -C ." {}
-mlr:process_csv_files ${SCRIPTS}/fzfrepl.zsh -n ${LINES} -o -c "mlr {q}" -q "cat" {}
-nl:prepend_numbers_to_lines ${SCRIPTS}/fzfrepl.zsh -o -c "nl {q}" {}
-openssl:examine_ssl_certs ${SCRIPTS}/fzfrepl.zsh -H1 "openssl x509 -help|&less" -o -c "openssl x509 -noout {q}" -q " -text" {}
-sed-n:stream_editor_(with_--quiet_option) ${SCRIPTS}/fzfrepl.zsh -o -c "sed -n {q}" {}
-sed:stream_editor ${SCRIPTS}/fzfrepl.zsh -o -c "sed {q}" {}
-shuf:sample_random_rows ${SCRIPTS}/fzfrepl.zsh -o -c "shuf {q}" {}
-sort:sort_lines ${SCRIPTS}/fzfrepl.zsh -o -c "sort {q}" {}
-tac:print_file_in_reverse ${SCRIPTS}/fzfrepl.zsh -o -c "tac {q}" {}
-tail:show_final_lines ${SCRIPTS}/fzfrepl.zsh -o -c "tail {q}" {}
-tr:translate_or_delete_chars ${SCRIPTS}/fzfrepl.zsh -o -c "tr {q}" {}
+awk:file_processing_language ${SCRIPTS}/fzfrepl.zsh -o o -c "awk {q}" {}
+cat:print_file ${SCRIPTS}/fzfrepl.zsh -o o -c "cat {q}" {}
+colrm:delete_char_columns ${SCRIPTS}/fzfrepl.zsh -o o -c "colrm {q}" {}
+column:format_into_columns ${SCRIPTS}/fzfrepl.zsh -o o -c "column {q}" {}
+cut:extract_columns ${SCRIPTS}/fzfrepl.zsh -o o -c "cut {q}" {}
+fold:wrap_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "fold {q}" {}
+grep:filter_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "grep {q}" {}
+head:show_initial_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "head {q}" {}
+iconv:convert_from_one_encoding_to_another ${SCRIPTS}/fzfrepl.zsh -o o -c "iconv {q}" {}
+jq:process_json_files ${SCRIPTS}/fzfrepl.zsh -o o -c "jq {q}" -q " -C ." {}
+mlr:process_csv_files ${SCRIPTS}/fzfrepl.zsh -n ${LINES} -o o -c "mlr {q}" -q "cat" {}
+nl:prepend_numbers_to_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "nl {q}" {}
+openssl:examine_ssl_certs ${SCRIPTS}/fzfrepl.zsh -H1 "openssl x509 -help|&less" -o o -c "openssl x509 -noout {q}" -q " -text" {}
+sed-n:stream_editor_(with_--quiet_option) ${SCRIPTS}/fzfrepl.zsh -o o -c "sed -n {q}" {}
+sed:stream_editor ${SCRIPTS}/fzfrepl.zsh -o o -c "sed {q}" {}
+shuf:sample_random_rows ${SCRIPTS}/fzfrepl.zsh -o o -c "shuf {q}" {}
+sort:sort_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "sort {q}" {}
+tac:print_file_in_reverse ${SCRIPTS}/fzfrepl.zsh -o o -c "tac {q}" {}
+tail:show_final_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "tail {q}" {}
+tr:translate_or_delete_chars ${SCRIPTS}/fzfrepl.zsh -o o -c "tr {q}" {}
 visidata:explore_and_edit_data vd {}
 visidata:visidata_for_sqlite vd -f sqlite {}
-xmlstarlet:process_xml_files ${SCRIPTS}/fzfrepl.zsh -o -c "xmlstarlet {q}" {}
+xmlstarlet:process_xml_files ${SCRIPTS}/fzfrepl.zsh -o o -c "xmlstarlet {q}" {}
 
