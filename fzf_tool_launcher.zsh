@@ -58,23 +58,26 @@ Select program for processing file."
 	}
     fi
     # Fit header to screen
-    local header1="ctrl-g:quit|enter:run in ${dfltwin//eval/this window}|alt-1:run in ${win1}|alt-2:run in ${win2}|ctrl-v:view raw file|alt-v:view formatted file"
+    local header1="ctrl-g:quit|enter:run in ${dfltwin//eval/this window}|alt-1:run in ${win1}|alt-2:run in ${win2}|ctrl-v:view raw file|alt-v:view formatted file|alt-h:show help for selected tool"
     local header2 i1=0 ncols=$((COLUMNS-5))
     local i2=${ncols}
     until ((i2>${#header1})); do
-	i2=${${header1[${i1:-0},${i2}]}[(I)|]}
+	i2=${${header1[${i1:-0},${i2}]}[(I)\|]}
 	header2+="${header1[${i1},((i1+i2-1))]}
 "
 	i1=$((i1+i2+1))
 	i2=$((i1+ncols))
     done
     header2+=${header1[$i1,$i2]}
+    # Command to show tool manpage
+    local helpcmd="man \$(print {1}|cut -f1 -d\:)||{eval \"\$(print {1}|cut -f1 -d\:) --help\" 2>/dev/null||eval \"\$(print {1}|cut -f1 -d\:) -h\"}|less"
     # Feed tools menu to fzf
     sed -e '/#/d;/^\s*\$/d' -e "s*{}*${1}*g" "${toolsmenu}"| \
     	fzf --with-nth=1 --preview-window=down:3:wrap \
 	    --height=100% \
 	    --header="${header2}" \
     	    --preview='echo {2..}' \
+	    --bind="alt-h:execute(${helpcmd})" \
     	    --bind="alt-v:execute(${viewfile} >&2)" \
 	    --bind="ctrl-v:execute(${PAGER} ${1} >&2)" \
 	    --bind="alt-1:execute(${windowcmds[${win1}]})" \
