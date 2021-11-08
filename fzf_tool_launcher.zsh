@@ -6,15 +6,15 @@
 # LICENSE: GNU GPL V3 (http://www.gnu.org/licenses)
 # Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 
-function fzf-tool-menu() {
-    [[ ${SHELL} =~ zsh ]] || { echo "This function only works with zsh"; return 1 }
+# TODO: rename to fzftoolmenu? (easier to type)
+function fzftool-menu() {
     if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
-	print "Usage: fzf-tool-menu <FILE>
+	print "Usage: fzftool-menu <FILE>
 Select program for processing file."
 	return
     fi
     local toolsmenu 
-    zstyle -s ':fzf-tool:' tools_menu_file toolsmenu || toolsmenu="${HOME}/.fzfrepl/tools_menu"
+    zstyle -s ':fzftool:' tools_menu_file toolsmenu || toolsmenu="${HOME}/.fzfrepl/tools_menu"
     # Commands for running tool in different types of window
     typeset -A windowcmds
     typeset cmdstr="{2..}"
@@ -45,12 +45,12 @@ Select program for processing file."
     # Command for viewing the file formatted 
     typeset viewfile 
     typeset -a filetypes
-    zstyle -g filetypes ':fzf-tool:previewcmd:'
+    zstyle -g filetypes ':fzftool:previewcmd:'
     viewfile="${PAGER} ${1}"
     if [[ ${#filetypes} -gt 0 ]]; then
 	local t tmp
         foreach t (${filetypes}) {
-	    zstyle -s ':fzf-tool:previewcmd:' "${t}" tmp
+	    zstyle -s ':fzftool:previewcmd:' "${t}" tmp
 	    if [[ "${1}" == *${t} ]]; then
 		viewfile="${tmp//\{\}/${1}}|${PAGER}"
 		break
@@ -82,23 +82,23 @@ Select program for processing file."
     	    --bind="enter:execute(${windowcmds[${dfltwin}]})"
 }
 
-function fzf-tool-files() {
-    [[ ${SHELL} =~ zsh ]] || { echo "This function only works with zsh"; return 1 }
+# TODO: rename to just fzftool? (easier to type)
+function fzftool-files() {
     if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
-	print "Usage: fzf-tool-files <FILES>...
+	print "Usage: fzftool-files <FILES>...
 Preview & select file(s) to be processed, and program(s) to do the processing."
 	return
     fi
     typeset preview maxsize 
     typeset -a filetypes
-    zstyle -g filetypes ':fzf-tool:previewcmd:'
-    zstyle -s ':fzf-tool:' max_preview_size maxsize || maxsize=10000000
+    zstyle -g filetypes ':fzftool:previewcmd:'
+    zstyle -s ':fzftool:' max_preview_size maxsize || maxsize=10000000
     local condstr="[ \$(stat -c '%s' {}) -gt ${maxsize} ]"
     if [[ ${#filetypes} -gt 0 ]]; then
 	preview='f={} && if'
 	local t tmp
         foreach t (${filetypes}) {
-	    zstyle -s ':fzf-tool:previewcmd:' "${t}" tmp
+	    zstyle -s ':fzftool:previewcmd:' "${t}" tmp
 	    preview+=" [ -z \"\${f%%*${t}}\" ];then ${tmp};elif"
 	    preview+=" [ -z \"\${f%%*${t:u}}\" ];then ${tmp};elif"
 	    preview+=" [ -z \"\${f%%*${(C)t}}\" ];then ${tmp};elif"
@@ -112,13 +112,13 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     # you have to quote the {+} replacement in the sed command, otherwise it introduces spaces which makes sed think the command
     # is incomplete. However, when I try the same thing with the --bind command it doesn't work; fzf emits an "unknown action" error,
     # followed by the text right after the +. fzf treats the + as an action separator (used for chaining commnds, see the docs).
-    # Also $tools doesn't work if {} (the selected filename) contains spaces due to same reasons stated above.
-    #tools="sed '/#/d;/^\s*\$/d' ${toolsmenu}|fzf --with-nth=1 --preview-window=down:3:wrap --preview='echo \{2..}|sed -e s@\{\}@{}@g -e s@\{\+\}@\"{+}\"@g' --bind='enter:execute(tmux new-window -n test -d \"\$(echo \{2..}|sed -e s@\{\}@{}@g)\")'"
 
     # NOTE: TRY $'' quoting to fix problem noted above, also maybe setting RC_QUOTES might help?
 
     # TODO: either in this function, or in fzfrepl, add keybinding to pipe output to new/existing tool window
     #       imagine having different frames in the same window all working on the same initial file...
+
+    # TODO: if there is only one file arg then jump straight to fzftool-menu
 
     # Fit header to fit screen
     local header1="ctrl-g:quit|enter:tools menu|ctrl-j:print filename|ctrl-v:view raw|alt-v:view formatted"
@@ -139,7 +139,7 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
 				   --bind="ctrl-v:execute(${PAGER} {} >&2)" \
 				   --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
 				   --bind="ctrl-j:accept" \
-				   --bind="enter:execute(source ${funcsourcetrace%%:[0-9]##} && fzf-tool-menu {})")
+				   --bind="enter:execute(source ${funcsourcetrace%%:[0-9]##} && fzftool-menu {})")
     local -a lines
     lines=("${(@f)file}")
     print ${lines[-1]}
