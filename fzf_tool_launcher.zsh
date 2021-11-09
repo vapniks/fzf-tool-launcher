@@ -71,16 +71,17 @@ Select program for processing file."
     header2+=${header1[$i1,$i2]}
     # Command to show tool manpage
     local helpcmd="man \$(print {1}|cut -f1 -d\:)||{eval \"\$(print {1}|cut -f1 -d\:) --help\" 2>/dev/null||eval \"\$(print {1}|cut -f1 -d\:) -h\"}|less"
-    # Feed tools menu to fzf
-    sed -e '/#/d;/^\s*\$/d' -e "s*{}*${1}*g" "${toolsmenu}"| \
+    # Feed tools menu to fzf, after substituting {} for quoted file args
+    local fileargs="${${@/%/\"}[@]/#/\"}"
+    sed -e '/#/d;/^\s*\$/d' -e "s#{}#${fileargs}#g" "${toolsmenu}" | \
     	fzf --with-nth=1 --preview-window=down:3:wrap \
-	    --height=100% \
-	    --header="${header2}" \
+    	    --height=100% \
+    	    --header="${header2}" \
     	    --preview='echo {2..}' \
-	    --bind="alt-h:execute(${helpcmd})" \
+    	    --bind="alt-h:execute(${helpcmd})" \
     	    --bind="alt-v:execute(${viewfile} >&2)" \
-	    --bind="ctrl-v:execute(${PAGER} ${1} >&2)" \
-	    --bind="alt-1:execute(${windowcmds[${win1}]})" \
+    	    --bind="ctrl-v:execute(${PAGER} ${1} >&2)" \
+    	    --bind="alt-1:execute(${windowcmds[${win1}]})" \
     	    --bind="alt-2:execute(${windowcmds[${win2}]})" \
     	    --bind="enter:execute(${windowcmds[${dfltwin}]})"
 }
@@ -142,7 +143,7 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
 				   --bind="ctrl-v:execute(${PAGER} {} >&2)" \
 				   --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
 				   --bind="ctrl-j:accept" \
-				   --bind="enter:execute(source ${funcsourcetrace%%:[0-9]##} && fzftool-menu {})")
+				   --bind="enter:execute(source ${funcsourcetrace%%:[0-9]##} && fzftool-menu {+})")
     local -a lines
     lines=("${(@f)file}")
     print ${lines[-1]}
