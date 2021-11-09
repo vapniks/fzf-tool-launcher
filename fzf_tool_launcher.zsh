@@ -81,9 +81,9 @@ Select program for processing file."
     	    --bind="alt-h:execute(${helpcmd})" \
     	    --bind="alt-v:execute(${viewfile} >&2)" \
     	    --bind="ctrl-v:execute(${PAGER} ${1} >&2)" \
-    	    --bind="alt-1:execute(${windowcmds[${win1}]})" \
-    	    --bind="alt-2:execute(${windowcmds[${win2}]})" \
-    	    --bind="enter:execute(${windowcmds[${dfltwin}]})"
+    	    --bind="alt-1:execute(${windowcmds[${win1}]})+abort" \
+    	    --bind="alt-2:execute(${windowcmds[${win2}]})+abort" \
+    	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort"
 }
 
 # TODO: rename to just fzftool? (easier to type)
