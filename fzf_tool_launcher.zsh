@@ -81,9 +81,10 @@ Select program for processing file."
     	    --height=100% \
     	    --header="${header2}" \
     	    --preview='echo {2..}' \
+	    --prompt='> ' \
     	    --bind="alt-h:execute(${helpcmd})" \
     	    --bind="alt-v:execute(${viewfile} >&2)" \
-    	    --bind="ctrl-v:execute(${PAGER} ${1} >&2)" \
+    	    --bind="ctrl-v:execute(${PAGER} ${*} >&2)" \
     	    --bind="alt-1:execute(${windowcmds[${win1}]})+abort" \
     	    --bind="alt-2:execute(${windowcmds[${win2}]})+abort" \
     	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort"
