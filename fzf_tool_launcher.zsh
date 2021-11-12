@@ -42,7 +42,7 @@ Select program for processing file."
 	win1=${FZFTOOL_WIN1:-eval}
 	win2=${FZFTOOL_WIN2:-eval}
     fi
-    # Command for viewing the file formatted 
+    # Command for viewing the files formatted
     typeset viewfile 
     typeset -a filetypes
     zstyle -g filetypes ':fzftool:previewcmd:'
@@ -58,7 +58,7 @@ Select program for processing file."
 	}
     fi
     # Fit header to screen
-    local header1="ctrl-g:quit|enter:run in ${dfltwin//eval/this window}|alt-1:run in ${win1}|alt-2:run in ${win2}|ctrl-v:view raw file|alt-v:view formatted file|alt-h:show help for selected tool"
+    local header1="ctrl-g:quit|enter:run in ${dfltwin//e(val|xec)/this window}|alt-1:run in ${win1}|alt-2:run in ${win2}|ctrl-v:view raw file|alt-v:view formatted file|alt-h:show help for selected tool"
     local header2 i1=0 ncols=$((COLUMNS-5))
     local i2=${ncols}
     until ((i2>${#header1})); do
