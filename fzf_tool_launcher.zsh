@@ -8,11 +8,10 @@
 
 typeset -gx FZFTOOL_SRC="${FZFTOOL_SRC:-${funcsourcetrace%%:[0-9]##}}"
 
-# TODO: rename to fzftoolmenu? (easier to type)
 # TODO: accept STDIN as an alternative to a file arg?
-function fzftool-menu() {
+function fzftoolmenu() {
     if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
-	print "Usage: fzftool-menu <FILE>
+	print "Usage: fzftoolmenu <FILE>
 Select program for processing file."
 	return
     fi
@@ -90,10 +89,9 @@ Select program for processing file."
     	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort"
 }
 
-# TODO: rename to just fzftool? (easier to type)
-function fzftool-files() {
+function fzftool() {
     if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
-	print "Usage: fzftool-files <FILES>...
+	print "Usage: fzftool <FILES>...
 Preview & select file(s) to be processed, and program(s) to do the processing."
 	return
     fi
@@ -129,7 +127,7 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     header2+=${header1[$i1,$i2]}
     # Feed input to fzf
     if [[ $# -eq 1 ]]; then
-	fzftool-menu ${@}
+	fzftoolmenu ${@}
     else
 	print -l ${@}|fzf --height=100% \
 			  --header="${header2}" \
@@ -137,6 +135,6 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
 			  --bind="ctrl-v:execute(${PAGER} {} >&2)" \
 			  --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
 			  --bind="ctrl-j:accept" \
-			  --bind="enter:execute(source ${FZFTOOL_SRC} && fzftool-menu {+})"
+			  --bind="enter:execute(source ${FZFTOOL_SRC} && fzftoolmenu {+})"
     fi
 }
