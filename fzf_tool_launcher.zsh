@@ -70,7 +70,7 @@ Select program for processing file."
     done
     header2+=${header1[$i1,$i2]}
     # Command to show tool manpage
-    local helpcmd="man \$(print {1}|cut -f1 -d\:)||{eval \"\$(print {1}|cut -f1 -d\:) --help\" 2>/dev/null||eval \"\$(print {1}|cut -f1 -d\:) -h\"}|less"
+    local helpcmd="man \$(print {1}|cut -f1 -d\:) >&2||{eval \"\$(print {1}|cut -f1 -d\:) --help\" >&2}|less"
     # Feed tools menu to fzf, after substituting {} for quoted file args
     local fileargs="${${@/%/\"}[@]/#/\"}"
     sed -e '/#/d;/^\s*\$/d' -e "s#{}#${fileargs}#g" "${toolsmenu}" | \
