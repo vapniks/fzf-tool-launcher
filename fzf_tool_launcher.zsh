@@ -115,9 +115,6 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     else
 	preview="cat {}"
     fi
-    # TODO: either in this function, or in fzfrepl, add keybinding to pipe output to new/existing tool window
-    #       imagine having different frames in the same window all working on the same initial file...
-
     # Fit header to fit screen
     local header1="ctrl-g:quit|enter:tools menu|ctrl-j:print filename|ctrl-v:view raw|alt-v:view formatted"
     local header2 i1=0 ncols=$((COLUMNS-5))
