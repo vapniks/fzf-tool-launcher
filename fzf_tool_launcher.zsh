@@ -115,18 +115,8 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     else
 	preview="cat {}"
     fi
-    # TODO: try to get {+} replacements working. Have tried all different kinds of quoting combinations, but none seem to work.
-    # The substitution works for the --preview option, but not the --bind option. To get it to work for the --preview option
-    # you have to quote the {+} replacement in the sed command, otherwise it introduces spaces which makes sed think the command
-    # is incomplete. However, when I try the same thing with the --bind command it doesn't work; fzf emits an "unknown action" error,
-    # followed by the text right after the +. fzf treats the + as an action separator (used for chaining commnds, see the docs).
-
-    # NOTE: TRY $'' quoting to fix problem noted above, also maybe setting RC_QUOTES might help?
-
     # TODO: either in this function, or in fzfrepl, add keybinding to pipe output to new/existing tool window
     #       imagine having different frames in the same window all working on the same initial file...
-
-    # TODO: if there is only one file arg then jump straight to fzftool-menu
 
     # Fit header to fit screen
     local header1="ctrl-g:quit|enter:tools menu|ctrl-j:print filename|ctrl-v:view raw|alt-v:view formatted"
@@ -141,14 +131,15 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     done
     header2+=${header1[$i1,$i2]}
     # Feed input to fzf
-    local file=$(print -l ${@}|fzf --height=100% \
-				   --header="${header2}" \
-				   --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
-				   --bind="ctrl-v:execute(${PAGER} {} >&2)" \
-				   --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
-				   --bind="ctrl-j:accept" \
-				   --bind="enter:execute(source ${funcsourcetrace%%:[0-9]##} && fzftool-menu {+})")
-    local -a lines
-    lines=("${(@f)file}")
-    print ${lines[-1]}
+    if [[ $# -eq 1 ]]; then
+	fzftool-menu ${@}
+    else
+	print -l ${@}|fzf --height=100% \
+			  --header="${header2}" \
+			  --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
+			  --bind="ctrl-v:execute(${PAGER} {} >&2)" \
+			  --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
+			  --bind="ctrl-j:accept" \
+			  --bind="enter:execute(source ${FZFTOOL_SRC} && fzftool-menu {+})"
+    fi
 }
