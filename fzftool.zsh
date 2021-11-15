@@ -6,7 +6,7 @@
 # LICENSE: GNU GPL V3 (http://www.gnu.org/licenses)
 # Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 
-typeset -gx FZFTOOL_SRC="${FZFTOOL_SRC:-${funcsourcetrace%%:[0-9]##}}"
+typeset -gx FZFTOOL_SRC="${FZFTOOL_SRC:-${funcsourcetrace[1]%%:[0-9]##}}"
 
 # TODO: accept STDIN as an alternative to a file arg?
 function fzftoolmenu() {
