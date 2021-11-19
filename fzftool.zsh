@@ -6,8 +6,6 @@
 # LICENSE: GNU GPL V3 (http://www.gnu.org/licenses)
 # Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 
-typeset -gx FZFTOOL_SRC="${FZFTOOL_SRC:-${funcsourcetrace[1]%%:[0-9]##}}"
-
 # TODO: accept STDIN as an alternative to a file arg?
 function fzftoolmenu() {
     if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
@@ -89,7 +87,11 @@ Select program for processing file."
     	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort"
 }
 
+# TODO; if arg is directory add all files in directory. Also add keybinding for updating items
+#       (in case files are added to directory arg, e.g. FZFREPL_DATADIR, after processing with one of the tools)
 function fzftool() {
+    typeset -gx FZFTOOL_SRC="${FZFTOOL_SRC:-${funcsourcetrace[1]%%:[0-9]##}}"
+
     if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
 	print "Usage: fzftool <FILES>...
 Preview & select file(s) to be processed, and program(s) to do the processing."
