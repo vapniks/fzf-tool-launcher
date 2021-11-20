@@ -132,7 +132,7 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
 	print -l ${@}|fzf --height=100% \
 			  --header="${header2}" \
 			  --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
-			  --bind="alt-a:reload(print -l ${*} ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out)" \
+			  --bind="alt-a:reload(print -l ${*} ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))" \
 			  --bind="ctrl-v:execute(${PAGER} {} >&2)" \
 			  --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
 			  --bind="ctrl-j:accept" \
