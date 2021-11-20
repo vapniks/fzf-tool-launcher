@@ -8,7 +8,7 @@
 
 # TODO: accept STDIN as an alternative to a file arg?
 function fzftoolmenu() {
-    if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
+    if [[ $# -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
 	print "Usage: fzftoolmenu <FILE>
 Select program for processing file."
 	return
@@ -71,8 +71,15 @@ Select program for processing file."
     header2+=${header1[$i1,$i2]}
     # Command to show tool manpage
     local helpcmd="man \$(print {1}|cut -f1 -d\:) >&2||{eval \"\$(print {1}|cut -f1 -d\:) --help\" >&2}|less"
-    # Feed tools menu to fzf, after substituting {} for quoted file args
+    # Substitute {} for quoted file args
     local fileargs="${${@/%/\"}[@]/#/\"}"
+    # Replace "-" arg with STDIN
+    local tempfile="${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzftool-$$.in"
+    if [[ ${fileargs} == *\"-\"* ]]; then
+	cat > ${tempfile}
+	fileargs=${fileargs//\"-\"/${tempfile}}
+    fi
+    # Feed tools menu to fzf
     sed -e '/#/d;/^\s*\$/d' -e "s#{}#${fileargs}#g" "${toolsmenu}" | \
     	fzf --with-nth=1 --preview-window=down:3:wrap \
     	    --height=100% \
