@@ -91,7 +91,8 @@ Select program for processing file."
     	    --bind="ctrl-v:execute(${PAGER} ${*} >&2)" \
     	    --bind="alt-1:execute(${windowcmds[${win1}]})+abort" \
     	    --bind="alt-2:execute(${windowcmds[${win2}]})+abort" \
-    	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort"
+    	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort" \
+	    --bind="alt-a:execute(source ${FZFTOOL_SRC} && fzftool ${sources})"
 }
 
 function fzftool() {
