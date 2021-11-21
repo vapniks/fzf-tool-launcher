@@ -122,7 +122,7 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
 	preview="cat {}"
     fi
     # Fit header to fit screen
-    local header1="ctrl-g:quit|enter:tools menu|ctrl-j:print filename|ctrl-v:view raw|alt-v:view formatted"
+    local header1="ctrl-g:quit|enter:tools menu|ctrl-j:print filename|ctrl-v:view raw|alt-v:view formatted|alt-a:add fzfrepl output files"
     local header2 i1=0 ncols=$((COLUMNS-5))
     local i2=${ncols}
     until ((i2>${#header1})); do
