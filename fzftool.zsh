@@ -71,16 +71,16 @@ Select program for processing file."
     header2+=${header1[$i1,$i2]}
     # Command to show tool manpage
     local helpcmd="man \$(print {1}|cut -f1 -d\:) >&2||{eval \"\$(print {1}|cut -f1 -d\:) --help\" >&2}|less"
-    # Substitute {} for quoted file args
-    local fileargs="${${@/%/\"}[@]/#/\"}"
+    # Quote sources/args
+    local sources="${${@/%/\"}[@]/#/\"}"
     # Replace "-" arg with STDIN
     local tempfile="${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzftool-$$.in"
-    if [[ ${fileargs} == *\"-\"* ]]; then
+    if [[ ${sources} == *\"-\"* ]]; then
 	cat > ${tempfile}
-	fileargs=${fileargs//\"-\"/${tempfile}}
+	sources=${sources//\"-\"/${tempfile}}
     fi
     # Feed tools menu to fzf
-    sed -e '/#/d;/^\s*\$/d' -e "s#{}#${fileargs}#g" "${toolsmenu}" | \
+    sed -e '/#/d;/^\s*\$/d' -e "s#{}#${sources}#g" "${toolsmenu}" | \
     	fzf --with-nth=1 --preview-window=down:3:wrap \
     	    --height=100% \
     	    --header="${header2}" \
@@ -132,17 +132,26 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
 	i2=$((i1+ncols))
     done
     header2+=${header1[$i1,$i2]}
+    # Replace "-" arg with STDIN
+    typeset -a args=(${@})
+    local tempfile="${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzftool-$$.in"
+    if [[ -n ${args[(r)(#s)-(#e)]} ]]; then
+	cat > "${tempfile}"
+	args[(i)(#s)-(#e)]="${tempfile}"
+    fi
     # Feed input to fzf
-    if [[ $# -eq 1 ]]; then
-	fzftoolmenu ${@}
+    if [[ ${#args} -eq 1 ]]; then
+	fzftoolmenu "${args}"
     else
-	print -l ${@}|fzf --height=100% \
-			  --header="${header2}" \
-			  --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
-			  --bind="alt-a:reload(print -l ${*} ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))" \
-			  --bind="ctrl-v:execute(${PAGER} {} >&2)" \
-			  --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
-			  --bind="ctrl-j:accept" \
-			  --bind="enter:execute(source ${FZFTOOL_SRC} && fzftoolmenu {+})"
+	# reload action needs args to be quoted to prevent splitting at whitespace
+	typeset -a args2=(${${args/%/\"}[@]/#/\"})
+	print -l ${args[*]}|fzf --height=100% \
+				--header="${header2}" \
+				--preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
+				--bind="alt-a:reload(print -l ${args2[*]} ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))" \
+				--bind="ctrl-v:execute(${PAGER} {} >&2)" \
+				--bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
+				--bind="ctrl-j:accept" \
+				--bind="enter:execute(source ${FZFTOOL_SRC} && fzftoolmenu {+})"
     fi
 }
