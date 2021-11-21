@@ -6,7 +6,6 @@
 # LICENSE: GNU GPL V3 (http://www.gnu.org/licenses)
 # Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 
-# TODO: accept STDIN as an alternative to a file arg?
 function fzftoolmenu() {
     if [[ $# -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
 	print "Usage: fzftoolmenu <FILE>
@@ -58,7 +57,7 @@ Select program for processing file."
 	}
     fi
     # Fit header to screen
-    local header1="ctrl-g:quit|enter:run in ${dfltwin//e(val|xec)/this window}|alt-1:run in ${win1}|alt-2:run in ${win2}|ctrl-v:view raw file|alt-v:view formatted file|alt-h:show help for selected tool"
+    local header1="ctrl-g:quit|enter:run in ${dfltwin//e(val|xec)/this window}|alt-1:run in ${win1}|alt-2:run in ${win2}|ctrl-v:view raw file|alt-v:view formatted file|alt-h:show help for selected tool|alt-a:show files menu"
     local header2 i1=0 ncols=$((COLUMNS-5))
     local i2=${ncols}
     until ((i2>${#header1})); do
@@ -92,7 +91,8 @@ Select program for processing file."
     	    --bind="alt-1:execute(${windowcmds[${win1}]})+abort" \
     	    --bind="alt-2:execute(${windowcmds[${win2}]})+abort" \
     	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort" \
-	    --bind="alt-a:execute(source ${FZFTOOL_SRC} && fzftool ${sources})"
+	    --bind="alt-a:execute(source ${FZFTOOL_SRC} && fzftool ${sources} \
+	    				 ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))+abort"
 }
 
 function fzftool() {
@@ -144,15 +144,17 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     if [[ ${#args} -eq 1 ]]; then
 	fzftoolmenu "${args}"
     else
-	# reload action needs args to be quoted to prevent splitting at whitespace
-	typeset -a args2=(${${args/%/\"}[@]/#/\"})
-	print -l ${args[*]}|fzf --height=100% \
-				--header="${header2}" \
-				--preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
-				--bind="alt-a:reload(print -l ${args2[*]} ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))" \
-				--bind="ctrl-v:execute(${PAGER} {} >&2)" \
-				--bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
-				--bind="ctrl-j:accept" \
-				--bind="enter:execute(source ${FZFTOOL_SRC} && fzftoolmenu {+})"
+	# reload action needs args to be quoted to prevent splitting at whitespace.
+	# Also add any fzfrepl output files that aren't already there
+	typeset -a args2=(${${${args/%/\"}[@]/#/\"}:#\"${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out\"}\
+			      ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))
+	print -l ${args[*]} |fzf --height=100% \
+				 --header="${header2}" \
+				 --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
+				 --bind="alt-a:reload(print -l ${args2[*]})" \
+				 --bind="ctrl-v:execute(${PAGER} {} >&2)" \
+				 --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
+				 --bind="ctrl-j:accept" \
+				 --bind="enter:execute(source ${FZFTOOL_SRC} && fzftoolmenu {+})"
     fi
 }
