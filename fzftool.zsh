@@ -146,12 +146,11 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     else
 	# reload action needs args to be quoted to prevent splitting at whitespace.
 	# Also add any fzfrepl output files that aren't already there
-	typeset -a args2=(${${${args/%/\"}[@]/#/\"}:#\"${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out\"}\
-			      ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))
+	typeset -a args2=(${${${args/%/\"}[@]/#/\"}:#\"${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out\"})
 	print -l ${args[*]} |fzf --height=100% \
 				 --header="${header2}" \
 				 --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
-				 --bind="alt-a:reload(print -l ${args2[*]})" \
+				 --bind="alt-a:reload(print -l ${args2[*]} ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))" \
 				 --bind="ctrl-v:execute(${PAGER} {} >&2)" \
 				 --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
 				 --bind="ctrl-j:accept" \
