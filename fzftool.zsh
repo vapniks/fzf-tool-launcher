@@ -6,6 +6,13 @@
 # LICENSE: GNU GPL V3 (http://www.gnu.org/licenses)
 # Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 
+# NOTE: if fzftoolmenu is called recursively in a fzfrepl pipeline the final value printed after quitting
+#       all called commands may not be what you expect. This is usually not a problem because you would
+#       save the output using the final fzfrepl prompt (i.e. press alt-j, or press alt-v to view in PAGER
+#       and save from there). I have looked into trying to fix it, but it complicated; I think the output
+#       from an fzftoolmenu call is being printed to the prompt of the calling fzf process.
+#       I cannot replicate this behaviour with a single fzf call, so it might be something to do with ptys
+#       being shared between calls.
 function fzftoolmenu() {
     if [[ $# -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
 	print "Usage: fzftoolmenu <FILE>
