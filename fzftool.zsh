@@ -9,10 +9,18 @@
 # NOTE: if fzftoolmenu is called recursively in a fzfrepl pipeline the final value printed after quitting
 #       all called commands may not be what you expect. This is usually not a problem because you would
 #       save the output using the final fzfrepl prompt (i.e. press alt-j, or press alt-v to view in PAGER
-#       and save from there). I have looked into trying to fix it, but it complicated; I think the output
+#       and save from there). I have looked into trying to fix it, but its complicated; I think the output
 #       from an fzftoolmenu call is being printed to the prompt of the calling fzf process.
 #       I cannot replicate this behaviour with a single fzf call, so it might be something to do with ptys
 #       being shared between calls.
+
+# TODO: for tools that dont use fzfrepl there should be a way of automatically going back to fzftool menu
+#       to choose next tool in pipeline
+# TODO: add option/keybinding to prevent live updating of preview window 
+# TODO: change name? this website says not to use "tool" in command names: https://smallstep.com/blog/the-poetics-of-cli-command-names/
+# TODO: allow handling files separately when multiple files are selected: C-v should call "less FILE1 FILE2..." so that :n/:p can be
+#       used to change files viewed, and there should be a keybinding to quickly change the current input file for the main view
+# TODO: allow scoping in pre-defined environmental variables, e.g. (regexps in regex-collection.zsh)
 function fzftoolmenu() {
     if [[ $# -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
 	print "Usage: fzftoolmenu <FILE>
@@ -158,7 +166,7 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
 				 --header="${header2}" \
 				 --preview="stat -c 'SIZE:%s bytes OWNER:%U GROUP:%G PERMS:%A' {} && ${preview}" \
 				 --bind="alt-a:reload(print -l ${args2[*]} ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))" \
-				 --bind="ctrl-v:execute(${PAGER} {} >&2)" \
+				 --bind="alt-V:execute(${PAGER} {} >&2)" \
 				 --bind="alt-v:execute({${preview}}|${PAGER} >&2)" \
 				 --bind="ctrl-j:accept" \
 				 --bind="enter:execute(source ${FZFTOOL_SRC} && fzftoolmenu {+})"

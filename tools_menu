@@ -21,6 +21,7 @@ sed-n:stream_editor_(with_--quiet_option) ${SCRIPTS}/fzfrepl.zsh -o o -c "sed -n
 sed:stream_editor ${SCRIPTS}/fzfrepl.zsh -o o -c "sed {q}" {}
 shuf:sample_random_rows ${SCRIPTS}/fzfrepl.zsh -o o -c "shuf {q}" {}
 sort:sort_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "sort {q}" {}
+sqlite-utils:browse_data_files_using_sqlite ${SHELL_SCRIPTS_DIRECTORY}/fzfrepl -o o -c 'sqlite-utils memory {s} "{q}" -t' {}
 tac:print_file_in_reverse ${SCRIPTS}/fzfrepl.zsh -o o -c "tac {q}" {}
 tail:show_final_lines ${SCRIPTS}/fzfrepl.zsh -o o -c "tail {q}" {}
 tr:translate_or_delete_chars ${SCRIPTS}/fzfrepl.zsh -o o -n ${LINES} -c "tr {q}" {}

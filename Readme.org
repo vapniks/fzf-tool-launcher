@@ -58,9 +58,9 @@ zstyle ':fzf-tool-launcher:' max_preview_size 5242880
 
 ** Keybindings
 *** File menu
-| Alt+v  | view entire formatted file with $PAGER (unless its larger than max_preview_size) |
-| Ctrl+v | view entire raw file with $PAGER                                                 |
-| Ctrl+j | exit and print the selected file                                                 |
+| Alt+v       | view entire formatted file with $PAGER (unless its larger than max_preview_size) |
+| Alt+Shift+v | view entire raw file with $PAGER                                                 |
+| Ctrl+j      | exit and print the selected file                                                 |
 *** Tools menu
 | Enter | run the selected tool on the selected file |
 ** Tips
