@@ -122,7 +122,8 @@ function fzftool() {
 
     if [[ "${#}" -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
 	print "Usage: fzftool <FILES>...
-Preview & select file(s) to be processed, and program(s) to do the processing."
+Preview & select file(s) to be processed, and program(s) to do the processing.
+Use - instead of filename to process STDIN."
 	return
     fi
     typeset preview maxsize 
@@ -159,15 +160,21 @@ Preview & select file(s) to be processed, and program(s) to do the processing."
     typeset -a args=(${@})
     local tempfile="${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzftool-$$.in"
     if [[ -n ${args[(r)(#s)-(#e)]} ]]; then
-	cat > "${tempfile}"
-	args[(i)(#s)-(#e)]="${tempfile}"
+	if [[ -t 0 ]]; then
+	    print -u2 "Error: no command or input supplied."
+	    return 1
+	else
+	    cat > "${tempfile}"
+	    args[(i)(#s)-(#e)]="${tempfile}"
+	fi
     fi
     # Feed input to fzf
     if [[ ${#args} -eq 1 ]]; then
 	fzftoolmenu "${args}"
     else
 	# reload action needs args to be quoted to prevent splitting at whitespace.
-	# Also add any fzfrepl output files that aren't already there
+	# Also add any fzfrepl output files that aren't already there (first remove them from args, then add
+        # them all in reload command with alt-a keybinding).
 	typeset -a args2=(${${${args/%/\"}[@]/#/\"}:#\"${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out\"})
 	print -l ${args[*]} |fzf --height=100% \
 				 --header="${header2}" \
