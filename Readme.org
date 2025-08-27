@@ -3,8 +3,7 @@ Browse & preview contents of files, and launch tools/pipelines to process a sele
 
 Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 ** Installation & requirements
-This file needs to be sourced into your zsh shell (e.g. in your init file),
-and tmux needs to be running before you can use it.
+This file needs to be sourced into your zsh shell (e.g. in your init file).
 ** Usage & description
 > fzf-tool-launcher [FILE..]
    
