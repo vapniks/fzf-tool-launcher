@@ -21,6 +21,8 @@
 # TODO: allow handling files separately when multiple files are selected: C-v should call "less FILE1 FILE2..." so that :n/:p can be
 #       used to change files viewed, and there should be a keybinding to quickly change the current input file for the main view
 # TODO: allow scoping in pre-defined environmental variables, e.g. (regexps in regex-collection.zsh)
+# TODO: look at this https://jvns.ca/blog/2024/11/29/why-pipes-get-stuck-buffering/
+# TODO: manpage?
 function fzftoolmenu() {
     if [[ $# -lt 1 || "${@[(I)-h|--help]}" -gt 0 ]]; then
 	print "Usage: fzftoolmenu <FILE>
@@ -90,8 +92,13 @@ Select program for processing file."
     # Replace "-" arg with STDIN
     local tempfile="${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzftool-$$.in"
     if [[ ${sources} == *\"-\"* ]]; then
-	cat > ${tempfile}
-	sources=${sources//\"-\"/${tempfile}}
+	if [[ -t 0 ]]; then
+	    print -u2 "Error: no command or input supplied."
+	    return 1
+	else
+	    cat > ${tempfile}
+	    sources=${sources//\"-\"/${tempfile}}
+	fi
     fi
     # Feed tools menu to fzf
     sed -e '/#/d;/^\s*\$/d' -e "s#{}#${sources}#g" "${toolsmenu}" | \
