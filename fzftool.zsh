@@ -114,7 +114,7 @@ Select program for processing file."
     	    --bind="alt-2:execute(${windowcmds[${win2}]})+abort" \
     	    --bind="enter:execute(${windowcmds[${dfltwin}]})+abort" \
 	    --bind="alt-a:execute(source ${FZFTOOL_SRC} && fzftool ${sources} \
-	    				 ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))+abort"
+ ${FZFREPL_DATADIR:-${TMPDIR:-/tmp}}/fzfrepl-*.out(N))+abort"
 }
 
 function fzftool() {
