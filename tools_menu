@@ -1,6 +1,6 @@
 # -*- mode: sh -*-
 # -*- (sh-set-shell "zsh") -*-
-# Commands for use with fzf-tool-launcher & fzfrepl
+# Commands for use with fzftool & fzfrepl
 # Set or replace ${SCRIPTS} to the directory containing fzfrepl.zsh
 awk:file_processing_language ${SCRIPTS}/fzfrepl.zsh -o o -c "awk {q}" {}
 cat:print_file ${SCRIPTS}/fzfrepl.zsh -o o -n ${LINES} -c "cat {q}" {}
