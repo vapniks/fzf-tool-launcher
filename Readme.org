@@ -1,11 +1,11 @@
-* fzf-tool-launcher
+* fzftool
 Browse & preview contents of files, and launch tools/pipelines to process a selected file.
 
 Bitcoin donations gratefully accepted: 1AmWPmshr6i9gajMi1yqHgx7BYzpPKuzMz
 ** Installation & requirements
 This file needs to be sourced into your zsh shell (e.g. in your init file).
 ** Usage & description
-> fzf-tool-launcher [FILE..]
+> fzftool [FILE..]
    
 This function allows you to browse files (passed as args) using fzf,
 and then launch a tool (e.g. fzfrepl) to process the data in the file.
@@ -25,9 +25,9 @@ to return to the file menu.
 Preview commands and other options are stored as zstyles, and the tools
 menu items are stored in a config file. To set a preview command for a
 particular file-ending, use the file-ending as the style name, and
-':fzf-tool-launcher:previewcmd:' as the context, e.g:
+':fzftool:previewcmd:' as the context, e.g:
 
-zstyle ':fzf-tool-launcher:previewcmd:' csv 'mlr --icsv --opprint cat {}'
+zstyle ':fzftool:previewcmd:' csv 'mlr --icsv --opprint cat {}'
 
 {} is a placeholder for the filename.
 Note: uppercase & capitalized versions of file-endings are also matched
@@ -37,7 +37,7 @@ above example.
 By default the tools menu is defined in ~/.fzfrepl/tools_menu, but you
 can change this location by setting the tools_menu_file style, like this:
 
-zstyle ':fzf-tool-launcher:' tools_menu_file "~/.fzfrepl/tools_menu"
+zstyle ':fzftool:' tools_menu_file "~/.fzfrepl/tools_menu"
 
 Each line of that file can either be a comment line starting with #,
 or a tool definition; a word naming the tool, followed by the command,
@@ -53,7 +53,7 @@ the preview window unformatted. The default threshold for what counts
 as a large file is 10485760 bytes (10MiB), but you can change it like
 this:
 
-zstyle ':fzf-tool-launcher:' max_preview_size 5242880
+zstyle ':fzftool:' max_preview_size 5242880
 
 ** Keybindings
 *** File menu
